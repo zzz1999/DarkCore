@@ -1,0 +1,16 @@
+name: EntityReskin
+version: '0.1.0'
+main: io.github.zzz1999.entityreskin.server.EntityReskinPlugin
+api-version: '1.13'
+description: Assigns Bedrock-format appearances to entities; visuals are served by the resource backend and rendered by the client mod.
+website: https://github.com/zzz1999/EntityReskin
+commands:
+  entityreskin:
+    description: Manage entity appearances.
+    usage: /entityreskin <set|clear|info|reload|status>
+    permission: entityreskin.admin
+    aliases: [er]
+permissions:
+  entityreskin.admin:
+    description: Allows managing EntityReskin appearances.
+    default: op

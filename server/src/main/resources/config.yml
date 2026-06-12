@@ -1,0 +1,36 @@
+# EntityReskin server-side configuration.
+backend:
+  # Resource backend base URL. The client fetches the manifest and asset downloads from here.
+  # May also be overridden with the JVM property -Dentityreskin.backend.base-url=...
+  base-url: "http://localhost:8080/"
+  # Server token, obtained after registering this server in the backend. Reset it there if leaked.
+  server-token: ""
+  # Manifest-hash poll interval in seconds (minimum 30).
+  poll-interval-seconds: 300
+
+# Appearance identifiers to preload on join (optional). Listed identifiers are prefetched into
+# client memory on join, avoiding a download pause when the entity first appears; unlisted
+# appearances are still fetched on demand.
+# Example:
+#   preload:
+#     - "entityreskin:dragon_red"
+preload: []
+
+# Behaviour when a preloaded appearance fails to download. Only affects the preload list; every
+# other appearance is always fetched on demand, and such a failure never blocks joining.
+preload-failure:
+  # ALLOW = let the player join and download on first sight; KICK = kick, naming the failed appearance.
+  policy: "ALLOW"
+  # Seconds to wait for the client to report preload results; on timeout the policy applies; 0 = no timeout.
+  timeout-seconds: 30
+  # Kick message; {appearance} is replaced with the appearance that failed to download.
+  kick-message: "Failed to download appearance resources: {appearance}. Please retry later or contact an administrator."
+
+# Join-time preload progress bar (a BossBar at the top of the screen). Counts only the preload list.
+preload-progress-bar:
+  enabled: false
+  title: "Loading appearance resources…"
+  # Chat notice (preload only; on-demand downloads when an entity appears are not announced).
+  # {appearances} is replaced with the preloaded appearance list.
+  notify-text: true
+  text-message: "Preloading appearance resources: {appearances}"
