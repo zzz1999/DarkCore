@@ -1,0 +1,6 @@
+# Normalize line endings: LF in the repo, CRLF only for Windows batch scripts.
+* text=auto eol=lf
+*.bat text eol=crlf
+gradlew text eol=lf
+*.jar binary
+*.png binary
