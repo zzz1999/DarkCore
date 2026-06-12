@@ -1,0 +1,26 @@
+# Central version catalog.
+# `shared` only needs Gson + JUnit. `web` (Spring Boot) versions are below.
+# Fabric/GeckoLib/Stonecutter versions are added when the `client` module is introduced.
+[versions]
+gson = "2.11.0"
+junit = "5.11.4"
+springBoot = "4.0.7"
+springDependencyManagement = "1.1.7"
+jjwt = "0.12.6"
+# Oldest supported server API (1.13). Compiling against it guarantees the plugin never
+# references API missing on 1.13; the same jar runs unchanged on all newer servers.
+spigotApi = "1.13.2-R0.1-SNAPSHOT"
+
+[libraries]
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigotApi" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
