@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: entityreskin-web
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    async:
+      # Upper bound for one throttled streaming download (rate limiting stretches transfers).
+      request-timeout: 600000
+  datasource:
+    url: jdbc:h2:file:./data/entityreskin;AUTO_SERVER=TRUE
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  servlet:
+    multipart:
+      # Hard cap on upload size (defends against oversized uploads before they hit the app).
+      max-file-size: 32MB
+      max-request-size: 40MB
+  mail:
+    host: ${ENTITYRESKIN_MAIL_HOST:smtp.163.com}
+    port: ${ENTITYRESKIN_MAIL_PORT:465}
+    username: ${ENTITYRESKIN_MAIL_USERNAME:}
+    password: ${ENTITYRESKIN_MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+
+server:
+  port: 8080
+
+entityreskin:
+  storage:
+    # Content-addressed blob root. Uploaded files are stored by their SHA-256, never by
+    # client-supplied name (no path traversal), and are never parsed by the backend.
+    root: ${ENTITYRESKIN_STORAGE_ROOT:./data/blobs}
+  jwt:
+    # MUST be overridden in production (>= 32 bytes). HS256+ signing key.
+    secret: ${ENTITYRESKIN_JWT_SECRET:dev-only-insecure-secret-change-me-0123456789abcdef0123456789abcdef}
+    ttl-minutes: 1440
+  email:
+    # When true (default for dev), verification codes are logged instead of emailed,
+    # so the application starts without real SMTP credentials.
+    dev-mode: ${ENTITYRESKIN_EMAIL_DEV_MODE:true}
+    # Only these domains may register or be bound as a notification address (QQ/Tencent + NetEase).
+    # Matched exactly (case-insensitive) against the segment after the final '@'.
+    allowed-domains: ${ENTITYRESKIN_EMAIL_ALLOWED_DOMAINS:qq.com,vip.qq.com,foxmail.com,163.com,126.com,yeah.net,vip.163.com,vip.126.com,188.com}
+    # Minimum seconds between successive code emails to the same address for the same purpose
+    # (anti-abuse and SMTP-quota protection). A request inside the window is answered normally
+    # but no new code is generated or sent. Set to 0 to disable.
+    send-cooldown-seconds: ${ENTITYRESKIN_EMAIL_SEND_COOLDOWN_SECONDS:60}
+  # Public base URL the client uses to fetch the manifest and signed blob downloads.
+  public-base-url: ${ENTITYRESKIN_PUBLIC_BASE_URL:http://localhost:8080/}
+  signing:
+    # HMAC key for signed download URLs. MUST be overridden in production (>= 32 bytes).
+    secret: ${ENTITYRESKIN_SIGNING_SECRET:dev-only-insecure-signing-secret-0123456789abcdef0123456789}
+  download:
+    # Validity window for signed download URLs (24h). Clients re-fetch the manifest after expiry.
+    url-ttl-minutes: ${ENTITYRESKIN_DOWNLOAD_TTL_MINUTES:1440}
+    # Default token-bucket rate for newly registered servers; paid tiers raise it.
+    default-bytes-per-second: ${ENTITYRESKIN_DEFAULT_BYTES_PER_SECOND:1048576}
+  upload:
+    # Total stored bytes allowed per account.
+    user-quota-bytes: ${ENTITYRESKIN_USER_QUOTA_BYTES:209715200}
+  billing:
+    # Shared secret the payment provider's webhook presents to credit an account. MUST be set
+    # in production; when empty the recharge endpoint rejects all requests.
+    recharge-secret: ${ENTITYRESKIN_RECHARGE_SECRET:}
+    # One-time trial traffic credit (bytes) granted on first email verification, so a server owner
+    # can evaluate the service before paying. Default 300 MiB (314572800); set 0 to disable
+    # (pay-only). Not counted as a recharge.
+    trial-bytes: ${ENTITYRESKIN_TRIAL_BYTES:314572800}
+    # Referral bonus paid to the inviter when an invited account recharges (percent).
+    referral-bonus-percent: ${ENTITYRESKIN_REFERRAL_BONUS_PERCENT:10}
+  stats:
+    # Salt for hashing player IPs before use in analytics (PII minimization). Validated at
+    # startup (>= 32 bytes); set a strong random value in production. The dev default is
+    # rejected under the prod profile.
+    ip-salt: ${ENTITYRESKIN_STATS_IP_SALT:dev-only-insecure-stats-salt-0123456789abcdef}
+    # How often (ms) inactive server statistics are swept from memory.
+    sweep-interval-millis: ${ENTITYRESKIN_STATS_SWEEP_INTERVAL_MILLIS:600000}
+  captcha:
+    # Cloudflare Turnstile secret. Blank disables captcha verification (dev/MVP); set it in
+    # production (with the frontend widget) to enforce captcha on register and password reset.
+    secret: ${ENTITYRESKIN_CAPTCHA_SECRET:}

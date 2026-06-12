@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EntityReskin — runtime entity re-skinning for Minecraft</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}"/>
+</head>
+<body class="min-h-screen bg-canvas font-sans text-ink antialiased">
+
+  <header class="sticky top-0 z-20 border-b border-hairline bg-surface">
+    <nav class="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+      <a href="/" class="flex items-baseline gap-2">
+        <span class="text-lg font-semibold tracking-tight">EntityReskin</span>
+      </a>
+      <div class="flex items-center gap-1.5 text-sm">
+        <a href="https://github.com/zzz1999/EntityReskin" class="rounded-full px-4 py-1.5 text-ink-soft transition-colors hover:text-ink">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="mx-auto max-w-3xl px-6 pt-24 pb-16 text-center">
+      <p class="mb-4 text-sm font-medium text-accent">Minecraft 1.13 → latest</p>
+      <h1 class="text-5xl font-semibold leading-[1.1] tracking-tight sm:text-6xl">
+        Re-skin entities<br/>at runtime
+      </h1>
+      <p class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
+        A server assigns a visual identifier to an entity; modded clients render it from
+        Bedrock-format geometry, textures, and animation streamed from a backend — loaded in
+        memory and discarded on disconnect. Unmodded players are unaffected.
+      </p>
+      <div class="mt-9 flex items-center justify-center gap-3">
+        <a href="https://github.com/zzz1999/EntityReskin" class="rounded-full bg-accent px-6 py-3 font-medium text-white transition-colors hover:bg-accent-strong">View on GitHub</a>
+        <a href="#how" class="rounded-full border border-hairline bg-surface px-6 py-3 font-medium text-ink transition-colors hover:bg-canvas">How it works ›</a>
+      </div>
+    </section>
+
+    <section id="how" class="mx-auto max-w-6xl px-6 py-12">
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-2xl bg-surface p-6 shadow-card ring-1 ring-hairline">
+          <div class="mb-4 text-2xl">🧩</div>
+          <h3 class="font-semibold">High-version support</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">One backend and a zero-NMS plugin cover Minecraft 1.13 through the latest release.</p>
+        </article>
+        <article class="rounded-2xl bg-surface p-6 shadow-card ring-1 ring-hairline">
+          <div class="mb-4 text-2xl">🔒</div>
+          <h3 class="font-semibold">In-memory assets</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Visuals load only in client memory, never touch disk, and are cleared the moment the player disconnects.</p>
+        </article>
+        <article class="rounded-2xl bg-surface p-6 shadow-card ring-1 ring-hairline">
+          <div class="mb-4 text-2xl">🛡️</div>
+          <h3 class="font-semibold">Signed delivery</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">Assets travel over HTTPS with HMAC-signed URLs and are verified by SHA-256 content hash.</p>
+        </article>
+        <article class="rounded-2xl bg-surface p-6 shadow-card ring-1 ring-hairline">
+          <div class="mb-4 text-2xl">🎯</div>
+          <h3 class="font-semibold">Selective replacement</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-soft">A render-dispatcher mixin replaces only flagged entities; everything else renders vanilla.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-12">
+      <div class="rounded-3xl bg-surface p-8 shadow-card ring-1 ring-hairline sm:p-12">
+        <h2 class="max-w-2xl text-3xl font-semibold tracking-tight">An experiment in remote-delivered rendering</h2>
+        <p class="mt-4 max-w-2xl leading-relaxed text-ink-soft">
+          EntityReskin started from one question: can a Java Edition client fetch a model from a
+          backend at runtime and use it to change how a live entity is rendered? The result is an
+          end-to-end system — a shared binary protocol, a Spring Boot asset backend, a Bukkit relay
+          plugin, and a Fabric client that bakes Bedrock-format assets in memory with GeckoLib.
+        </p>
+        <div class="mt-8 grid gap-6 sm:grid-cols-2">
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-medium">Control and data planes</h3>
+            <p class="mt-1 text-sm leading-relaxed text-ink-soft">Identifiers travel over a plugin-messaging control channel; bulk assets travel over a separate HTTPS path.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-medium">Integrity end to end</h3>
+            <p class="mt-1 text-sm leading-relaxed text-ink-soft">A deterministic, content-addressed manifest pins assets by SHA-256; the client verifies every byte before it bakes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-hairline">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-10 text-sm text-ink-soft sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex items-baseline gap-2">
+        <span class="font-semibold text-ink">EntityReskin</span>
+      </div>
+      <div>© 2026 · <a href="https://github.com/zzz1999/EntityReskin" class="hover:text-ink">github.com/zzz1999/EntityReskin</a></div>
+    </div>
+  </footer>
+
+</body>
+</html>

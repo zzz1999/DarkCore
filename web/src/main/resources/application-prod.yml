@@ -1,0 +1,19 @@
+# Production profile — activate with SPRING_PROFILES_ACTIVE=prod.
+# Uses MySQL 8.0 (e.g. a managed instance such as Alibaba Cloud RDS). The DB connection and ALL secrets are supplied via
+# environment variables; the dev-default secrets in application.yml are rejected under this profile
+# (see Secrets.requireStrong), so production will not start without real values.
+spring:
+  datasource:
+    # Point ENTITYRESKIN_DB_URL at the RDS endpoint, e.g.
+    #   jdbc:mysql://rm-xxxx.mysql.rds.aliyuncs.com:3306/entityreskin?useSSL=true&serverTimezone=UTC&characterEncoding=utf8
+    url: ${ENTITYRESKIN_DB_URL:jdbc:mysql://localhost:3306/entityreskin?useSSL=true&serverTimezone=UTC&characterEncoding=utf8&rewriteBatchedStatements=true}
+    username: ${ENTITYRESKIN_DB_USERNAME:entityreskin}
+    password: ${ENTITYRESKIN_DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      # Convenient for an early deployment; switch to a migration tool (e.g. Flyway) before scale.
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
