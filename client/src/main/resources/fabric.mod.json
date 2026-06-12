@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "entityreskin",
+  "version": "0.1.0",
+  "name": "EntityReskin",
+  "description": "Renders server-assigned entity appearances using Bedrock-format visuals downloaded at runtime.",
+  "authors": ["zzz1999"],
+  "contact": {
+    "homepage": "https://github.com/zzz1999/EntityReskin",
+    "sources": "https://github.com/zzz1999/EntityReskin"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["io.github.zzz1999.entityreskin.client.EntityReskinClient"]
+  },
+  "mixins": [
+    "entityreskin.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*",
+    "geckolib": ">=5.4.0"
+  }
+}
